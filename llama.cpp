@@ -1774,6 +1774,7 @@ static bool llama_eval_internal(
 
     // update kv token count
     lctx.kv_self.n = n_past + N;
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     struct ggml_tensor * res = gf->nodes[gf->n_nodes - 1];
     fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
