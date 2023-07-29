@@ -1722,8 +1722,8 @@ static bool llama_eval_internal(
 
 #if GGML_USE_MPI
     ggml_mpi_graph_compute_pre(lctx.ctx_mpi, gf, n_layer);
-    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 #endif
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
 #ifdef GGML_USE_METAL
     if (lctx.ctx_metal && N == 1) {
