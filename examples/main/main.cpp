@@ -407,16 +407,16 @@ int main(int argc, char ** argv) {
     std::vector<llama_token> embd;
     std::vector<llama_token> embd_guidance;
 
-    auto start_time = std::chrono::high_resolution_clock::now();
+    //auto start_time = std::chrono::high_resolution_clock::now();
     // do one empty run to warm up the model
     {
         const std::vector<llama_token> tmp = { llama_token_bos(), };
         llama_eval(ctx, tmp.data(), tmp.size(), 0, params.n_threads);
         llama_reset_timings(ctx);
     }
-    auto end_time = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-    fprintf(stderr, "Do one empty run to warm up the model: %ld microseconds.\n", duration);
+    //auto end_time = std::chrono::high_resolution_clock::now();
+    //auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+    //fprintf(stderr, "Do one empty run to warm up the model: %ld microseconds.\n", duration);
 
     //second warmup
     auto start_time = std::chrono::high_resolution_clock::now();
