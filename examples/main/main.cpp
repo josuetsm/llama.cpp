@@ -484,7 +484,7 @@ int main(int argc, char ** argv) {
                 int input_size = 0;
                 llama_token* input_buf = NULL;
                 
-                fprintf("ctx_guidance")
+                fprintf(stderr, "ctx_guidance")
                 if (n_past_guidance < (int) guidance_inp.size()) {
                     // Guidance context should have the same data with these modifications:
                     //
