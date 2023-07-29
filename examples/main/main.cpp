@@ -417,6 +417,17 @@ int main(int argc, char ** argv) {
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
     fprintf(stderr, "Do one empty run to warm up the model: %ld microseconds.\n", duration);
+
+    //second warmup
+    auto start_time = std::chrono::high_resolution_clock::now();
+    auto warmup_text = "Aquí tienes un texto de ejemplo que representa una entrada típica para tu modelo.";
+    auto warmup_tokens = ::llama_tokenize(ctx, warmup_text, true);
+    llama_eval(ctx, warmup_tokens.data(), warmup_tokens.size(), 0, params.n_threads);
+    llama_reset_timings(ctx);
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+    fprintf(stderr, "Do one empty run to warm up the model: %ld microseconds.\n", duration);
+
     
     while ((n_remain != 0 && !is_antiprompt) || params.interactive) {
         // predict
