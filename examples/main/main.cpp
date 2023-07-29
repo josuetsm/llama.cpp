@@ -512,7 +512,6 @@ int main(int argc, char ** argv) {
 
                 for (int i = 0; i < input_size; i += params.n_batch) {
                     int n_eval = std::min(input_size - i, params.n_batch);
-                    fprintf(stderr, "hola");
                     if (llama_eval(ctx_guidance, input_buf + i, n_eval, n_past_guidance, params.n_threads)) {
                         fprintf(stderr, "%s : failed to eval\n", __func__);
                         return 1;
@@ -527,6 +526,7 @@ int main(int argc, char ** argv) {
                 if (n_eval > params.n_batch) {
                     n_eval = params.n_batch;
                 }
+                fprintf(stderr, "hola");
                 if (llama_eval(ctx, &embd[i], n_eval, n_past, params.n_threads)) {
                     fprintf(stderr, "%s : failed to eval\n", __func__);
                     return 1;
