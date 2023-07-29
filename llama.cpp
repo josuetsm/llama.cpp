@@ -1426,7 +1426,6 @@ static bool llama_eval_internal(
     struct ggml_context * ctx0 = ggml_init(params);
 
     ggml_cgraph * gf = ggml_new_graph(ctx0);
-    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     // for big prompts, if BLAS is enabled, it is better to use only one thread
     // otherwise, the threads are spin-lock waiting for the BLAS calls and are degrading the performance
@@ -1449,7 +1448,6 @@ static bool llama_eval_internal(
         inpL = ggml_new_tensor_2d(ctx0, GGML_TYPE_F32, n_embd, N);
         memcpy(inpL->data, embd, N * n_embd * ggml_element_size(inpL));
     }
-    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     const int i_gpu_start = n_layer - n_gpu_layers;
     (void) i_gpu_start;
@@ -1685,7 +1683,6 @@ static bool llama_eval_internal(
         // input for next layer
         inpL = cur;
     }
-    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     lctx.use_buf(ctx0, 0);
 
@@ -1706,13 +1703,11 @@ static bool llama_eval_internal(
         embeddings = cur;
     }
 
-    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     // lm_head
     cur = ggml_mul_mat(ctx0, model.output, cur);
     ggml_set_name(cur, "result_output");
 
-    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
     
 
     lctx.use_buf(ctx0, -1);
@@ -1722,14 +1717,12 @@ static bool llama_eval_internal(
 
     // run the computation
     ggml_build_forward_expand(gf, cur);
-    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     // fprintf(stderr, "graph build time: %.3f ms (%d nodes, %d leafs)\n", (ggml_time_us() - t_start_us)/1000.0, gf.n_nodes, gf.n_leafs);
 
 #if GGML_USE_MPI
     ggml_mpi_graph_compute_pre(lctx.ctx_mpi, gf, n_layer);
 #endif
-    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
 #ifdef GGML_USE_METAL
     if (lctx.ctx_metal && N == 1) {
