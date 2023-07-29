@@ -526,10 +526,10 @@ int main(int argc, char ** argv) {
                 if (n_eval > params.n_batch) {
                     n_eval = params.n_batch;
                 }
-                if (llama_eval(ctx, &embd[i], n_eval, n_past, params.n_threads)) {
-                    fprintf(stderr, "%s : failed to eval\n", __func__);
-                    return 1;
-                }
+                //if (llama_eval(ctx, &embd[i], n_eval, n_past, params.n_threads)) {
+                //    fprintf(stderr, "%s : failed to eval\n", __func__);
+                //    return 1;
+                //}
                 n_past += n_eval;
             }
 
