@@ -482,8 +482,8 @@ int main(int argc, char ** argv) {
 
             if (ctx_guidance) {
                 int input_size = 0;
-                llama_token* input_buf = NULL;                
-                fprintf(stderr, "ctx_guidance");
+                llama_token* input_buf = NULL;
+                
                 if (n_past_guidance < (int) guidance_inp.size()) {
                     // Guidance context should have the same data with these modifications:
                     //
@@ -512,6 +512,7 @@ int main(int argc, char ** argv) {
 
                 for (int i = 0; i < input_size; i += params.n_batch) {
                     int n_eval = std::min(input_size - i, params.n_batch);
+                    fprintf(stderr, "hola");
                     if (llama_eval(ctx_guidance, input_buf + i, n_eval, n_past_guidance, params.n_threads)) {
                         fprintf(stderr, "%s : failed to eval\n", __func__);
                         return 1;
