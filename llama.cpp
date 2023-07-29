@@ -1758,20 +1758,25 @@ static bool llama_eval_internal(
 #else
     ggml_graph_compute_helper(lctx.work_buffer, gf, n_threads);
 #endif
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
     
 
 #if GGML_USE_MPI
     ggml_mpi_graph_compute_post(lctx.ctx_mpi, gf, n_layer);
 #endif
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     // update kv token count
     lctx.kv_self.n = n_past + N;
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     struct ggml_tensor * res = gf->nodes[gf->n_nodes - 1];
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     if (cgraph_fname) {
         ggml_graph_export(gf, cgraph_fname);
     }
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
 #ifdef GGML_PERF
     // print timing information per ggml operation (for debugging purposes)
