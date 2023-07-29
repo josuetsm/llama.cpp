@@ -420,7 +420,7 @@ int main(int argc, char ** argv) {
 
     //second warmup
     auto start_time = std::chrono::high_resolution_clock::now();
-    auto warmup_text = "Aquí tienes un texto de ejemplo que representa una entrada típica para tu modelo.";
+    auto warmup_text = "Classify the text between true or false:\nText: Frank Sinatra es un cantante.\nClassification:";
     auto warmup_tokens = ::llama_tokenize(ctx, warmup_text, true);
     llama_eval(ctx, warmup_tokens.data(), warmup_tokens.size(), 0, params.n_threads);
     llama_reset_timings(ctx);
