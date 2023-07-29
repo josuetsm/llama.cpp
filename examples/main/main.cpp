@@ -407,18 +407,14 @@ int main(int argc, char ** argv) {
     std::vector<llama_token> embd;
     std::vector<llama_token> embd_guidance;
 
-    // Get the start time
     auto start_time = std::chrono::high_resolution_clock::now();
-    
     // do one empty run to warm up the model
     {
         const std::vector<llama_token> tmp = { llama_token_bos(), };
         llama_eval(ctx, tmp.data(), tmp.size(), 0, params.n_threads);
         llama_reset_timings(ctx);
     }
-    // Get the end time
     auto end_time = std::chrono::high_resolution_clock::now();
-    // Calculate and print the duration
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
     fprintf(stderr, "Time taken: %ld microseconds.\n", duration);
     
@@ -535,11 +531,14 @@ int main(int argc, char ** argv) {
                 if (n_eval > params.n_batch) {
                     n_eval = params.n_batch;
                 }
-                fprintf(stderr, "hola");
+                auto start_time = std::chrono::high_resolution_clock::now();
                 if (llama_eval(ctx, &embd[i], n_eval, n_past, params.n_threads)) {
                     fprintf(stderr, "%s : failed to eval\n", __func__);
                     return 1;
                 }
+                auto end_time = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+                fprintf(stderr, "Time taken: %ld microseconds.\n", duration);
                 n_past += n_eval;
             }
 
