@@ -1729,6 +1729,7 @@ static bool llama_eval_internal(
 #if GGML_USE_MPI
     ggml_mpi_graph_compute_pre(lctx.ctx_mpi, gf, n_layer);
 #endif
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
 #ifdef GGML_USE_METAL
     if (lctx.ctx_metal && N == 1) {
@@ -1758,27 +1759,35 @@ static bool llama_eval_internal(
 
         ggml_graph_compute_helper(lctx.work_buffer, gf, n_threads);
     }
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
+
 #else
     ggml_graph_compute_helper(lctx.work_buffer, gf, n_threads);
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 #endif
+    
 
 #if GGML_USE_MPI
     ggml_mpi_graph_compute_post(lctx.ctx_mpi, gf, n_layer);
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 #endif
 
     // update kv token count
     lctx.kv_self.n = n_past + N;
 
     struct ggml_tensor * res = gf->nodes[gf->n_nodes - 1];
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     if (cgraph_fname) {
         ggml_graph_export(gf, cgraph_fname);
     }
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
 #ifdef GGML_PERF
     // print timing information per ggml operation (for debugging purposes)
     // requires GGML_PERF to be defined
     ggml_graph_print(gf);
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 #endif
 
     // plot the computation graph in dot format (for debugging purposes)
@@ -1799,6 +1808,7 @@ static bool llama_eval_internal(
             memcpy(logits_out.data(), (float *) ggml_get_data(res) + (n_vocab*(N-1)), sizeof(float)*n_vocab);
         }
     }
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     // extract embeddings
     if (!lctx.embedding.empty()) {
@@ -1807,10 +1817,12 @@ static bool llama_eval_internal(
         embedding_out.resize(n_embd);
         memcpy(embedding_out.data(), (float *) ggml_get_data(embeddings) + (n_embd*(N - 1)), sizeof(float)*n_embd);
     }
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     if (mem_per_token == 0) {
         mem_per_token = ggml_used_mem(ctx0)/N;
     }
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
 #if 0
     printf("\n%s: used_mem: eval ctx %.3f MB, scratch %.3f MB %.3f MB, work buf %.3f MB, n_past = %d, N = %d\n", __func__,
@@ -1822,6 +1834,7 @@ static bool llama_eval_internal(
 #endif
 
     ggml_free(ctx0);
+    fprintf(stderr, "\n\t\t\tllama_eval_internal: %ld microseconds.\n", std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start_time).count());
 
     // measure the performance only for the single-token evals
     if (N == 1) {
