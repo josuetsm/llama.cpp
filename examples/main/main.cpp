@@ -481,6 +481,7 @@ int main(int argc, char ** argv) {
             // embd is typically prepared beforehand to fit within a batch, but not always
 
             if (ctx_guidance) {
+                fprintf("ctx_guidance")
                 int input_size = 0;
                 llama_token* input_buf = NULL;
 
@@ -526,10 +527,10 @@ int main(int argc, char ** argv) {
                 if (n_eval > params.n_batch) {
                     n_eval = params.n_batch;
                 }
-                //if (llama_eval(ctx, &embd[i], n_eval, n_past, params.n_threads)) {
-                //    fprintf(stderr, "%s : failed to eval\n", __func__);
-                //    return 1;
-                //}
+                if (llama_eval(ctx, &embd[i], n_eval, n_past, params.n_threads)) {
+                    fprintf(stderr, "%s : failed to eval\n", __func__);
+                    return 1;
+                }
                 n_past += n_eval;
             }
 
