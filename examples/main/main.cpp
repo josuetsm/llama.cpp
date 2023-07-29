@@ -421,7 +421,6 @@ int main(int argc, char ** argv) {
     // Calculate and print the duration
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
     fprintf(stderr, "Time taken: %ld microseconds.\n", duration);
-    std::cout << "Time taken: " << duration << " microseconds." << std::endl;
     
     while ((n_remain != 0 && !is_antiprompt) || params.interactive) {
         // predict
@@ -658,6 +657,7 @@ int main(int argc, char ** argv) {
             --n_remain;
         } else {
             // some user input remains from prompt or interaction, forward it to processing
+            auto start_time = std::chrono::high_resolution_clock::now();
             while ((int) embd_inp.size() > n_consumed) {
                 embd.push_back(embd_inp[n_consumed]);
                 last_n_tokens.erase(last_n_tokens.begin());
@@ -667,6 +667,9 @@ int main(int argc, char ** argv) {
                     break;
                 }
             }
+            auto end_time = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+            fprintf(stderr, "Time taken: %ld microseconds.\n", duration);
         }
 
         // display text
