@@ -416,7 +416,7 @@ int main(int argc, char ** argv) {
     }
     auto end_time = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-    fprintf(stderr, "Time taken: %ld microseconds.\n", duration);
+    fprintf(stderr, "Do one empty run to warm up the model: %ld microseconds.\n", duration);
     
     while ((n_remain != 0 && !is_antiprompt) || params.interactive) {
         // predict
@@ -538,7 +538,7 @@ int main(int argc, char ** argv) {
                 }
                 auto end_time = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-                fprintf(stderr, "Time taken: %ld microseconds.\n", duration);
+                fprintf(stderr, "\nllama_eval: %ld microseconds.\n", duration);
                 n_past += n_eval;
             }
 
