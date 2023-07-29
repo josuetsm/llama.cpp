@@ -420,7 +420,7 @@ int main(int argc, char ** argv) {
     auto end_time = std::chrono::high_resolution_clock::now();
     // Calculate and print the duration
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
-    fprintf(stderr, "Time taken: %s\n", duration);
+    fprintf(stderr, "Time taken: %ld microseconds.\n", duration);
     std::cout << "Time taken: " << duration << " microseconds." << std::endl;
     
     while ((n_remain != 0 && !is_antiprompt) || params.interactive) {
