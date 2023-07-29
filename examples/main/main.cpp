@@ -18,6 +18,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <chrono>
 
 #if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
 #include <signal.h>
@@ -406,13 +407,22 @@ int main(int argc, char ** argv) {
     std::vector<llama_token> embd;
     std::vector<llama_token> embd_guidance;
 
+    // Get the start time
+    auto start_time = std::chrono::high_resolution_clock::now();
+    
     // do one empty run to warm up the model
     {
         const std::vector<llama_token> tmp = { llama_token_bos(), };
         llama_eval(ctx, tmp.data(), tmp.size(), 0, params.n_threads);
         llama_reset_timings(ctx);
     }
-
+    // Get the end time
+    auto end_time = std::chrono::high_resolution_clock::now();
+    // Calculate and print the duration
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time).count();
+    printf(stderr, "Time taken: %s\n", duration);
+    std::cout << "Time taken: " << duration << " microseconds." << std::endl;
+    
     while ((n_remain != 0 && !is_antiprompt) || params.interactive) {
         // predict
         if (embd.size() > 0) {
