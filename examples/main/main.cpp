@@ -481,10 +481,10 @@ int main(int argc, char ** argv) {
             // embd is typically prepared beforehand to fit within a batch, but not always
 
             if (ctx_guidance) {
-                fprintf("ctx_guidance")
                 int input_size = 0;
                 llama_token* input_buf = NULL;
-
+                
+                fprintf("ctx_guidance")
                 if (n_past_guidance < (int) guidance_inp.size()) {
                     // Guidance context should have the same data with these modifications:
                     //
